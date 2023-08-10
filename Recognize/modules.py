@@ -14,12 +14,12 @@ def remove_noise(image):
             cv2.rectangle(mask, (x, y, w, h), (255, 0, 0), -1)  # 사각형 그리기
 
             # 원본 이미지에서 사각형 영역 추출하여 subimages 리스트에 추가
-            subimage = image[y:y + h, x:x + w]
+            subimage =[x, y, w, h]
             subimages.append(subimage)
 
     masked_image = cv2.bitwise_and(image, mask)  # 보표 영역 추출
 
-    return masked_image
+    return masked_image, subimages
 
 def remove_staves(image):
     height, width = image.shape

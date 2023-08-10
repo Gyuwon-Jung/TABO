@@ -14,12 +14,20 @@ image_1 = modules.remove_noise(image_0)
 
 # 2. 오선 제거
 image_2, staves = modules.remove_staves(image_1)
+print('before')
+print(staves)
+
+
 
 # 3. 악보 이미지 정규화
 image_3, staves = modules.normalization(image_2, staves, 10)
+result_img = cv2.bitwise_not(image_3)
+print('after')
+print(staves)
+
 
 # 이미지 띄우기
-cv2.imshow('image', image_3)
+cv2.imshow('image', result_img)
 k = cv2.waitKey(0)
 if k == 27:
     cv2.destroyAllWindows()

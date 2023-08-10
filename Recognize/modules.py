@@ -4,31 +4,18 @@ import numpy as np
 import functions as fs
 
 def remove_noise(image):
-    # 1. 보표 영역 추출 및 그 외 노이즈 제거
     image = fs.threshold(image)  # 이미지 이진화
     mask = np.zeros(image.shape, np.uint8)  # 보표 영역만 추출하기 위해 마스크 생성
-
-    # 외곽선 검출
-    contours, _ = cv2.findContours(image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
-    # 보표를 사각형으로 표시
-    for contour in contours:
-        x, y, w, h = cv2.boundingRect(contour)
-
-        # 사각형 크기 조정
-        new_y = y - 10  # 위로 10px 이동
-        new_h = h + 20  # 위아래로 10px씩 늘림
-
+    subimages = []  # subimage들을 저장할 리스트
+    cnt, labels, stats, centroids = cv2.connectedComponentsWithStats(image)  # 레이블링
+    for i in range(1, cnt):
+        x, y, w, h, area = stats[i]
         if w > image.shape[1] * 0.5:  # 보표 영역에만
-            # 새로운 사각형 좌표 계산
-            new_x, new_y, new_w, new_h = x, new_y, w, new_h
+            cv2.rectangle(mask, (x, y, w, h), (255, 0, 0), -1)  # 사각형 그리기
 
-            # 이미지 범위를 벗어나지 않도록 조정
-            new_y = max(0, new_y)
-            new_h = min(image.shape[0] - new_y, new_h)
-
-            # 사각형 그리기
-            cv2.rectangle(mask, (new_x, new_y, new_w, new_h), (255, 0, 0), -1)
+            # 원본 이미지에서 사각형 영역 추출하여 subimages 리스트에 추가
+            subimage = image[y:y + h, x:x + w]
+            subimages.append(subimage)
 
     masked_image = cv2.bitwise_and(image, mask)  # 보표 영역 추출
 
@@ -74,7 +61,7 @@ def normalization(image, staves, standard):
     new_height = int(height * weight)  # 이미지의 높이에 가중치를 곱해줌
 
     image = cv2.resize(image, (new_width, new_height))  # 이미지 리사이징
-    ret, image = cv2.threshold(image, 127, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)  # 이미지 이진화
+    # ret, image = cv2.threshold(image, 127, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)  # 이미지 이진화 !! 이진화 작업시 음표 손실됨
     staves = [x * weight for x in staves]  # 오선 좌표에도 가중치를 곱해줌
 
     return image, staves

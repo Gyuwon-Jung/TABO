@@ -13,20 +13,25 @@ resource_path = os.getcwd() + "/resources/"
 image_0 = cv2.imread(resource_path + "music.jpg")
 
 # 1. 보표 영역 추출 및 그 외 노이즈 제거
-image_1 = modules.remove_noise(image_0)
+image_1,subimages_array = modules.remove_noise(image_0)
 
 # 2. 오선 제거
 image_2, staves = modules.remove_staves(image_1)
-print('before')
-print(staves)
 
 # 3. 악보 이미지 정규화
 image_3, staves = modules.normalization(image_2, staves, 10)
 
-# result_img = image_3.copy()
+# 오선 제거된 분할 이미지와 오선 정보에 대해 정규화 수행
+normalized_images = []
+for subimage_coords in subimages_array:
+    x, y, w, h = subimage_coords
+    subimage = image_0[y:y+h+10, x:x+w+10] #분할 좌표를 찾아 이미지 화 margin을 10px 줬음 안그러면 템플릿 매칭때 오류 발생.
+    subimage = fs.threshold(subimage) #그레이스케일 후 이진화
+    normalized_image, stave_info = modules.remove_staves(subimage) #오선 제거
+    normalized_image, stave_info = modules.normalization(normalized_image, stave_info, 10) # 정규화
+    normalized_images.append((normalized_image, stave_info))
+
 result_img = cv2.bitwise_not(image_3)
-print('after')
-print(staves)
 
 # 템플릿 이미지 파일명과 해당 이미지에 표시될 텍스트들
 template_data = [
@@ -42,50 +47,51 @@ template_data = [
 
 ]
 
-# 이미 처리한 위치를 저장하는 변수
-processed_locations = []
+recognition_list = []
 
-# 각 템플릿 이미지에 대해 템플릿 매칭 수행
-for template_info in template_data:
-    template_file = template_info["file"]
-    template_text = template_info["text"]
+# 템플릿 매칭 및 결과 이미지에 음표와 텍스트 추가
+for normalized_image, stave_info in normalized_images:
+    result_subimg = cv2.bitwise_not(normalized_image)
 
-    template_path = os.path.join(resource_path, template_file)
-    template = cv2.imread(template_path)
-    template = fs.threshold(template)  # 그레이스케일 및 이진화
+    # 각 subimage에 대한 processed_locations 리스트 초기화
+    processed_locations = []
 
-    result = cv2.matchTemplate(image_3, template, cv2.TM_CCOEFF_NORMED)
-    threshold = 0.7  # 매칭 결과의 유사도 임계값
+    for template_info in template_data:
+        template_file = template_info["file"]
+        template_text = template_info["text"]
 
-    # 유사도가 임계값보다 높은 위치 찾기
-    locations = np.where(result >= threshold)
-    for loc in zip(*locations[::-1]):
-        # 이미 처리한 위치 주변을 제외
-        skip_location = False
-        for processed_loc in processed_locations:
-            distance = np.sqrt((loc[0] - processed_loc[0]) ** 2 + (loc[1] - processed_loc[1]) ** 2)
-            if distance < 30:  # 이미 처리한 위치와의 거리가 일정 값 이하라면 skip
-                skip_location = True
-                break
+        template_path = os.path.join(resource_path, template_file)
+        template = cv2.imread(template_path)
+        template = fs.threshold(template)
+        result = cv2.matchTemplate(normalized_image, template, cv2.TM_CCOEFF_NORMED)
+        threshold = 0.7
 
-        if not skip_location:
-            # 이미 처리한 위치 목록에 추가
-            processed_locations.append((loc[0], loc[1], template_text,(loc[1] + loc[1] + template.shape[0])/2))  # 템플릿 텍스트도 저장
+        locations = np.where(result >= threshold)
+        for loc in zip(*locations[::-1]): #하나라도 검출 되었을때 중복 검출 방지 검사 반복문
+            skip_location = False
+            for processed_loc in processed_locations:
+                distance = np.sqrt((loc[0] - processed_loc[0]) ** 2 + (loc[1] - processed_loc[1]) ** 2)
+                if distance < 30:
+                    skip_location = True
+                    break
 
-            # 음표를 사각형으로 표시
-            cv2.rectangle(result_img, loc, (loc[0] + template.shape[1], loc[1] + template.shape[0]), (0, 0, 255), 2)
+            if not skip_location:
+                processed_locations.append((loc[0], loc[1], template_text, (loc[1] + loc[1] + template.shape[0]) / 2))
+                cv2.rectangle(result_subimg, loc, (loc[0] + template.shape[1], loc[1] + template.shape[0]), (0, 0, 255),
+                              2)
+                # cv2.putText(result_img, f'{template_text} ({loc[0]}, {loc[1]})', (loc[0], loc[1] - 10),
+                #             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1)
+    print(stave_info)
+    processed_locations.sort(key=lambda entry: entry[0])
+    recognition_list.append(processed_locations)
 
-            # 텍스트 추가
-            cv2.putText(result_img, f'{template_text} ({loc[0]}, {loc[1]})', (loc[0], loc[1] - 10),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1)
+    # 이미지 띄우기
+    cv2.imshow('result_subimage', result_subimg)
+    k = cv2.waitKey(0)
+    if k == 27:
+        cv2.destroyAllWindows()
 
-print(processed_locations)
-
-# 이미지 띄우기
-cv2.imshow('result_image', result_img)
-k = cv2.waitKey(0)
-if k == 27:
-    cv2.destroyAllWindows()
+print(recognition_list[0])
 
 # # 이미지 띄우기
 # cv2.imshow('result_image', result_img)

@@ -30,15 +30,16 @@ print(staves)
 
 # 템플릿 이미지 파일명과 해당 이미지에 표시될 텍스트들
 template_data = [
-    {"file": "template\whole_note.png", "text": "Whole Note"},
-    {"file": "template\half_left.png", "text": "Half Note"},
-    {"file": "template\half_right.png", "text": "Half Note"},
-    {"file": "template\eight_flag.png", "text": "Eight_flag"},
-    {"file": "template\quarter_left.png", "text": "Quarter Note"},
-    {"file": "template\quarter_right.png", "text": "Quarter Note"},
-    {"file": "template\on_rest.png", "text": "Rest Note"},
-    {"file": "template\clef.png", "text": "Clef"},
-    {"file": "template\sharp.png", "text": "Sharp"}
+{"file": "template\clef.png", "text": "Clef"},
+{"file": "template\sharp.png", "text": "Sharp"},
+{"file": "template\half_left.png", "text": "Half Note"},
+{"file": "template\half_right.png", "text": "Half Note"},
+{"file": "template\eight_flag.png", "text": "Eight_flag"},
+{"file": "template\quarter_left.png", "text": "Quarter Note"},
+{"file": "template\quarter_right.png", "text": "Quarter Note"},
+{"file": "template\on_rest.png", "text": "Rest Note"},
+{"file": "template\whole_note.png", "text": "Whole Note"},
+
 ]
 
 # 이미 처리한 위치를 저장하는 변수
@@ -71,20 +72,14 @@ for template_info in template_data:
             # 이미 처리한 위치 목록에 추가
             processed_locations.append((loc[0], loc[1], template_text))  # 템플릿 텍스트도 저장
 
-            # quarter note 중에 위에 2px 근처에 eight_flag가 있다면 octa note로 표기
-            if template_text == "Quarter Note":
-                y_top = loc[1]  # 현재 검출된 템플릿의 위쪽 y 좌표
-                for processed_loc in processed_locations:
-                    if processed_loc[1] > y_top and processed_loc[1] - y_top <= 2 and "Eight_flag" in processed_loc:
-                        template_text = "Octa Note"
-                        break
-
             # 음표를 사각형으로 표시
             cv2.rectangle(result_img, loc, (loc[0] + template.shape[1], loc[1] + template.shape[0]), (0, 0, 255), 2)
 
-            if template_text=="Octa Note":
-            # 음표를 텍스트로 표시
-                cv2.putText(result_img, template_text, (loc[0], loc[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1)
+            # 텍스트 추가
+            cv2.putText(result_img, f'{template_text} ({loc[0]}, {loc[1]})', (loc[0], loc[1] - 10),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1)
+
+print(processed_locations)
 
 # 이미지 띄우기
 cv2.imshow('result_image', result_img)

@@ -19,7 +19,7 @@ def remove_noise(image):
 
     masked_image = cv2.bitwise_and(image, mask)  # 보표 영역 추출
 
-    return masked_image, subimages
+    return masked_image
 
 def remove_staves(image):
     height, width = image.shape

@@ -70,7 +70,7 @@ for template_info in template_data:
 
         if not skip_location:
             # 이미 처리한 위치 목록에 추가
-            processed_locations.append((loc[0], loc[1], template_text))  # 템플릿 텍스트도 저장
+            processed_locations.append((loc[0], loc[1], template_text,(loc[1] + loc[1] + template.shape[0])/2))  # 템플릿 텍스트도 저장
 
             # 음표를 사각형으로 표시
             cv2.rectangle(result_img, loc, (loc[0] + template.shape[1], loc[1] + template.shape[0]), (0, 0, 255), 2)

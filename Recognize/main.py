@@ -1,4 +1,4 @@
-# Main.py
+# main.py
 
 import cv2
 import os
@@ -10,7 +10,7 @@ subimages_array = []  # 서브 이미지 배열들을 저장할 리스트
 
 # 이미지 불러오기
 resource_path = os.getcwd() + "/resources/"
-image_0 = cv2.imread(resource_path + "music.jpg")
+image_0 = cv2.imread(resource_path + "music8.jpg")
 
 # 1. 보표 영역 추출 및 그 외 노이즈 제거
 image_1,subimages_array = modules.remove_noise(image_0)
@@ -36,13 +36,18 @@ result_img = cv2.bitwise_not(image_3)
 # 템플릿 이미지 파일명과 해당 이미지에 표시될 텍스트들
 template_data = [
 {"file": "template\clef.png", "text": "Clef"},
+{"file": "template\clef_2.png", "text": "Clef"},
 {"file": "template\sharp.png", "text": "Sharp"},
 {"file": "template\half_left.png", "text": "Half Note"},
 {"file": "template\half_right.png", "text": "Half Note"},
 {"file": "template\eight_flag.png", "text": "Eight_flag"},
+{"file": "template\eight_flag_2.png", "text": "Eight_flag"},
 {"file": "template\quarter_left.png", "text": "Quarter Note"},
 {"file": "template\quarter_right.png", "text": "Quarter Note"},
-{"file": "template\on_rest.png", "text": "Rest Note"},
+{"file": "template\quarter_left_2.png", "text": "Quarter Note"},
+{"file": "template\quarter_right_2.png", "text": "Quarter Note"},
+{"file": "template\dot.png", "text": "Dot"},
+{"file": "template\quarter_rest.png", "text": "Quater Rest Note"},
 {"file": "template\whole_note.png", "text": "Whole Note"},
 
 ]
@@ -76,13 +81,13 @@ for normalized_image, stave_info in normalized_images:
                     break
 
             if not skip_location:
-                processed_locations.append((loc[0], loc[1], template_text, (loc[1] + loc[1] + template.shape[0]) / 2))
+                processed_locations.append([loc[0], loc[1], template_text, (loc[1] + loc[1] + template.shape[0]) / 2])
                 cv2.rectangle(result_subimg, loc, (loc[0] + template.shape[1], loc[1] + template.shape[0]), (0, 0, 255),
                               2)
                 # cv2.putText(result_img, f'{template_text} ({loc[0]}, {loc[1]})', (loc[0], loc[1] - 10),
                 #             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1)
     print(stave_info)
-    processed_locations.sort(key=lambda entry: entry[0])
+    processed_locations.sort(key=lambda entry: entry[0]) # x좌표 기준으로 정렬
     recognition_list.append(processed_locations)
 
     # 이미지 띄우기
@@ -91,7 +96,20 @@ for normalized_image, stave_info in normalized_images:
     if k == 27:
         cv2.destroyAllWindows()
 
-print(recognition_list[0])
+# recognition_list의 모든 결과에 대해서 8분 음표로 바꾸기 및 Eight_Flag 정보 삭제
+for result in recognition_list:
+    i = 0
+    while i < len(result) - 1:
+        if result[i][2] == "Quarter Note" and result[i + 1][2] == "Eight_flag":
+            result[i][2] = "Octa Note"
+            del result[i + 1]  # Eight_Flag 정보 삭제
+        else:
+            i += 1
+
+# 결과 확인
+for result in recognition_list:
+    print(result)
+
 
 # # 이미지 띄우기
 # cv2.imshow('result_image', result_img)

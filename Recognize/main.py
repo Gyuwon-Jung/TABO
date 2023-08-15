@@ -7,7 +7,7 @@ import numpy as np
 import functions as fs
 
 subimages_array = []  # 서브 이미지 배열들을 저장할 리스트
-
+stave_list=[] # 해당 악보의 모든 오선 정보를 담고 있는 리스트
 # 이미지 불러오기
 resource_path = os.getcwd() + "/resources/"
 image_0 = cv2.imread(resource_path + "music8.jpg")
@@ -25,11 +25,12 @@ image_3, staves = modules.normalization(image_2, staves, 10)
 normalized_images = []
 for subimage_coords in subimages_array:
     x, y, w, h = subimage_coords
-    subimage = image_0[y:y+h+10, x:x+w+10] #분할 좌표를 찾아 이미지 화 margin을 10px 줬음 안그러면 템플릿 매칭때 오류 발생.
+    subimage = image_0[y:y+h+10, x:x+w+10] #분할 좌표를 찾아 이미지화 margin을 10px 줬음 안그러면 템플릿 매칭때 오류 발생.
     subimage = fs.threshold(subimage) #그레이스케일 후 이진화
     normalized_image, stave_info = modules.remove_staves(subimage) #오선 제거
     normalized_image, stave_info = modules.normalization(normalized_image, stave_info, 10) # 정규화
-    normalized_images.append((normalized_image, stave_info))
+    normalized_images.append((normalized_image))
+    stave_list.append([stave_info])
 
 result_img = cv2.bitwise_not(image_3)
 
@@ -55,7 +56,7 @@ template_data = [
 recognition_list = []
 
 # 템플릿 매칭 및 결과 이미지에 음표와 텍스트 추가
-for normalized_image, stave_info in normalized_images:
+for normalized_image in normalized_images:
     result_subimg = cv2.bitwise_not(normalized_image)
 
     # 각 subimage에 대한 processed_locations 리스트 초기화
@@ -76,7 +77,7 @@ for normalized_image, stave_info in normalized_images:
             skip_location = False
             for processed_loc in processed_locations:
                 distance = np.sqrt((loc[0] - processed_loc[0]) ** 2 + (loc[1] - processed_loc[1]) ** 2)
-                if distance < 30:
+                if distance < 5:
                     skip_location = True
                     break
 
@@ -86,8 +87,11 @@ for normalized_image, stave_info in normalized_images:
                               2)
                 # cv2.putText(result_img, f'{template_text} ({loc[0]}, {loc[1]})', (loc[0], loc[1] - 10),
                 #             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1)
-    print(stave_info)
     processed_locations.sort(key=lambda entry: entry[0]) # x좌표 기준으로 정렬
+
+    # # x, y 좌표 제거
+    # processed_locations = [[entry[2], entry[3]] for entry in processed_locations]
+
     recognition_list.append(processed_locations)
 
     # 이미지 띄우기
@@ -103,8 +107,19 @@ for result in recognition_list:
         if result[i][2] == "Quarter Note" and result[i + 1][2] == "Eight_flag":
             result[i][2] = "Octa Note"
             del result[i + 1]  # Eight_Flag 정보 삭제
+
+        elif result[i][2] == "Quarter Note" and result[i + 1][2] == "Dot": # 현재 음표 다음에 점이 존재할 경우
+            result[i][2] = "Dotted Quarter Note"
+            del result[i + 1]  # Dot 정보 삭제
+
+        elif result[i][2] == "Half Note" and result[i + 1][2] == "Dot": # 현재 음표 다음에 점이 존재할 경우
+            result[i][2] = "Dotted Half Note"
+            del result[i + 1]  # Dot 정보 삭제
+
         else:
             i += 1
+
+print(stave_list)
 
 # 결과 확인
 for result in recognition_list:

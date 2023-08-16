@@ -30,7 +30,18 @@ for subimage_coords in subimages_array:
     normalized_image, stave_info = modules.remove_staves(subimage) #오선 제거
     normalized_image, stave_info = modules.normalization(normalized_image, stave_info, 10) # 정규화
     normalized_images.append((normalized_image))
-    stave_list.append([stave_info])
+
+    # 마지막 인덱스에 10을 더한 값을 추가
+    stave_info.append(stave_info[-1] + 10)
+
+    # 원래 리스트에 중간 값을 추가한 리스트 생성
+    new_stave_info = [stave_info[0]]
+
+    for i in range(len(stave_info) - 1):
+        mid_value = (stave_info[i] + stave_info[i + 1]) / 2
+        new_stave_info.extend([mid_value, stave_info[i + 1]])
+
+    stave_list.append(new_stave_info) # 도 레 미 파 솔 라 시 도
 
 result_img = cv2.bitwise_not(image_3)
 
@@ -94,11 +105,11 @@ for normalized_image in normalized_images:
 
     recognition_list.append(processed_locations)
 
-    # 이미지 띄우기
-    cv2.imshow('result_subimage', result_subimg)
-    k = cv2.waitKey(0)
-    if k == 27:
-        cv2.destroyAllWindows()
+    # # 이미지 띄우기
+    # cv2.imshow('result_subimage', result_subimg)
+    # k = cv2.waitKey(0)
+    # if k == 27:
+    #     cv2.destroyAllWindows()
 
 # recognition_list의 모든 결과에 대해서 8분 음표로 바꾸기 및 Eight_Flag 정보 삭제
 for result in recognition_list:

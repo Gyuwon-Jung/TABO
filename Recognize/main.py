@@ -168,7 +168,7 @@ print() # 공백추가
 
 
 
-# mapping_list와 recognition_list를 비교하여 가까운 값에 해당 음정 매핑하기
+# mapping_list와 recognition_list를 비교하여 가까운 값에 해당 음정 매핑하기 note의 좌표와 각 음표의 중점 좌표의 거리를 비교해서 가장 가까운 값을 가진 음표에 매핑
 mapped_result_list = []
 for mapping, recognition in zip(mapping_list, recognition_list):
     mapped_results = []
@@ -177,8 +177,8 @@ for mapping, recognition in zip(mapping_list, recognition_list):
         min_distance = float('inf')
         closest_mapping = None
         for map_entry in mapping:
-            map_x, map_pitch = map_entry
-            distance = abs(map_x - rec_coord)
+            note_coord, map_pitch = map_entry
+            distance = abs(note_coord - rec_coord)
             if distance < min_distance:
                 min_distance = distance
                 closest_mapping = map_pitch

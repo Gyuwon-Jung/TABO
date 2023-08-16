@@ -10,7 +10,7 @@ subimages_array = []  # 서브 이미지 배열들을 저장할 리스트
 stave_list=[] # 해당 악보의 모든 오선 정보를 담고 있는 리스트
 # 이미지 불러오기
 resource_path = os.getcwd() + "/resources/"
-image_0 = cv2.imread(resource_path + "music8.jpg")
+image_0 = cv2.imread(resource_path + "music.jpg")
 
 # 1. 보표 영역 추출 및 그 외 노이즈 제거
 image_1,subimages_array = modules.remove_noise(image_0)
@@ -59,7 +59,7 @@ template_data = [
 {"file": "template\quarter_left_2.png", "text": "Quarter Note"},
 {"file": "template\quarter_right_2.png", "text": "Quarter Note"},
 {"file": "template\dot.png", "text": "Dot"},
-{"file": "template\quarter_rest.png", "text": "Quater Rest Note"},
+{"file": "template\quarter_rest.png", "text": "Quater Rest"},
 {"file": "template\whole_note.png", "text": "Whole Note"},
 
 ]
@@ -132,16 +132,73 @@ for result in recognition_list:
 
 print(stave_list)
 
+print() # 공백추가
+
 # 결과 확인
 for result in recognition_list:
     print(result)
 
+print() # 공백추가
 
-# # 이미지 띄우기
-# cv2.imshow('result_image', result_img)
-# k = cv2.waitKey(0)
-# if k == 27:
-#     cv2.destroyAllWindows()
+
+# 각 음표의 높낮이 정보
+pitch_list = ['F5', 'E5', 'D5', 'C5', 'B4', 'A4', 'G4', 'F4', 'E4', 'D4', 'C4']
+
+# 매핑된 리스트 생성
+Temp_pitch_mapping = []
+for stave in stave_list:
+    pitch_mapping_per_stave = []
+    for pitch_index in stave:
+        pitch = pitch_list[int((pitch_index - 12.5) / 5)]  # pitch_list에서 피치 값을 가져옴
+        pitch_mapping_per_stave.append([pitch_index, pitch])
+    Temp_pitch_mapping.extend(pitch_mapping_per_stave)
+
+result_per_page = 11  # 각 페이지당 결과 개수
+mapping_list = []
+
+for page_start in range(0, len(Temp_pitch_mapping), result_per_page):
+    page_end = page_start + result_per_page
+    page_results = Temp_pitch_mapping[page_start:page_end]
+    mapping_list.append(page_results)
+
+for result in mapping_list:
+    print(result)
+
+print() # 공백추가
+
+
+
+# mapping_list와 recognition_list를 비교하여 가까운 값에 해당 음정 매핑하기 note의 좌표와 각 음표의 중점 좌표의 거리를 비교해서 가장 가까운 값을 가진 음표에 매핑
+mapped_result_list = []
+for mapping, recognition in zip(mapping_list, recognition_list):
+    mapped_results = []
+    for rec_entry in recognition:
+        rec_x, _, rec_text, rec_coord = rec_entry
+        min_distance = float('inf')
+        closest_mapping = None
+        for map_entry in mapping:
+            note_coord, map_pitch = map_entry
+            distance = abs(note_coord - rec_coord)
+            if distance < min_distance:
+                min_distance = distance
+                closest_mapping = map_pitch
+        if closest_mapping:
+            mapped_results.append([rec_text, closest_mapping])
+    mapped_result_list.append(mapped_results)
+
+# 결과 확인
+for result in mapped_result_list:
+    print(result)
+
+# # 결과를 텍스트 파일로 저장 (각 음표별로 분할되어있는)
+# output_file_path = "result.txt"
+# with open(output_file_path, "w") as output_file:
+#     for result in mapped_result_list:
+#         for entry in result:
+#             output_file.write(f"{entry[0]}, {entry[1]}\n")
+#         output_file.write("\n")  # 공백 추가
+#
+# print(f"Result saved to {output_file_path}")
 
 
 # # 템플릿 생성용 이미지 저장 경로

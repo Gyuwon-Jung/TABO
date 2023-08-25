@@ -10,7 +10,7 @@ subimages_array = []  # 서브 이미지 배열들을 저장할 리스트
 stave_list=[] # 해당 악보의 모든 오선 정보를 담고 있는 리스트
 # 이미지 불러오기
 resource_path = os.getcwd() + "/resources/"
-image_0 = cv2.imread(resource_path + "music1.jpg")
+image_0 = cv2.imread(resource_path + "music.jpg")
 
 # 1. 보표 영역 추출 및 그 외 노이즈 제거
 image_1,subimages_array = modules.remove_noise(image_0)
@@ -150,9 +150,11 @@ for stave in stave_list:
     pitch_mapping_per_stave = []
     for pitch_coord in stave:
         closest_pitch_index = min(range(len(stave)), key=lambda i: abs(stave[i] - pitch_coord))
-        pitch = pitch_list[closest_pitch_index]
-        pitch_mapping_per_stave.append([pitch_coord, pitch])
+        if 0 <= closest_pitch_index < len(pitch_list):
+            pitch = pitch_list[closest_pitch_index]
+            pitch_mapping_per_stave.append([pitch_coord, pitch])
     Temp_pitch_mapping.extend(pitch_mapping_per_stave)
+
 
 result_per_page = 11  # 각 페이지당 결과 개수
 mapping_list = []

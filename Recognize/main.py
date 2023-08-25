@@ -10,7 +10,7 @@ subimages_array = []  # 서브 이미지 배열들을 저장할 리스트
 stave_list=[] # 해당 악보의 모든 오선 정보를 담고 있는 리스트
 # 이미지 불러오기
 resource_path = os.getcwd() + "/resources/"
-image_0 = cv2.imread(resource_path + "music.jpg")
+image_0 = cv2.imread(resource_path + "music1.jpg")
 
 # 1. 보표 영역 추출 및 그 외 노이즈 제거
 image_1,subimages_array = modules.remove_noise(image_0)
@@ -47,8 +47,8 @@ result_img = cv2.bitwise_not(image_3)
 
 # 템플릿 이미지 파일명과 해당 이미지에 표시될 텍스트들
 template_data = [
-{"file": "template\clef.png", "text": "Clef"},
-{"file": "template\clef_2.png", "text": "Clef"},
+{"file": "template\clef.png", "text": "Treble"},
+{"file": "template\clef_2.png", "text": "Treble"},
 {"file": "template\sharp.png", "text": "Sharp"},
 {"file": "template\half_left.png", "text": "Half Note"},
 {"file": "template\half_right.png", "text": "Half Note"},
@@ -105,18 +105,18 @@ for normalized_image in normalized_images:
 
     recognition_list.append(processed_locations)
 
-    # # 이미지 띄우기
-    # cv2.imshow('result_subimage', result_subimg)
-    # k = cv2.waitKey(0)
-    # if k == 27:
-    #     cv2.destroyAllWindows()
+    # 이미지 띄우기
+    cv2.imshow('result_subimage', result_subimg)
+    k = cv2.waitKey(0)
+    if k == 27:
+        cv2.destroyAllWindows()
 
 # recognition_list의 모든 결과에 대해서 8분 음표로 바꾸기 및 Eight_Flag 정보 삭제
 for result in recognition_list:
     i = 0
     while i < len(result) - 1:
         if result[i][2] == "Quarter Note" and result[i + 1][2] == "Eight_flag":
-            result[i][2] = "Octa Note"
+            result[i][2] = "Eight Note"
             del result[i + 1]  # Eight_Flag 정보 삭제
 
         elif result[i][2] == "Quarter Note" and result[i + 1][2] == "Dot": # 현재 음표 다음에 점이 존재할 경우
@@ -148,9 +148,10 @@ pitch_list = ['F5', 'E5', 'D5', 'C5', 'B4', 'A4', 'G4', 'F4', 'E4', 'D4', 'C4']
 Temp_pitch_mapping = []
 for stave in stave_list:
     pitch_mapping_per_stave = []
-    for pitch_index in stave:
-        pitch = pitch_list[int((pitch_index - 12.5) / 5)]  # pitch_list에서 피치 값을 가져옴
-        pitch_mapping_per_stave.append([pitch_index, pitch])
+    for pitch_coord in stave:
+        closest_pitch_index = min(range(len(stave)), key=lambda i: abs(stave[i] - pitch_coord))
+        pitch = pitch_list[closest_pitch_index]
+        pitch_mapping_per_stave.append([pitch_coord, pitch])
     Temp_pitch_mapping.extend(pitch_mapping_per_stave)
 
 result_per_page = 11  # 각 페이지당 결과 개수

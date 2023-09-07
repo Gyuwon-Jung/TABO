@@ -10,7 +10,7 @@ subimages_array = []  # 서브 이미지 배열들을 저장할 리스트
 stave_list=[] # 해당 악보의 모든 오선 정보를 담고 있는 리스트
 # 이미지 불러오기
 resource_path = os.getcwd() + "/resources/"
-image_0 = cv2.imread(resource_path + "music.jpg")
+image_0 = cv2.imread(resource_path + "music1.jpg")
 
 # 1. 보표 영역 추출 및 그 외 노이즈 제거
 image_1,subimages_array = modules.remove_noise(image_0)

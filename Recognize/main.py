@@ -60,8 +60,7 @@ template_data = [
 {"file": "template\quarter_right_2.png", "text": "Quarter Note"},
 {"file": "template\dot.png", "text": "Dot"},
 {"file": "template\quarter_rest.png", "text": "Quater Rest"},
-{"file": "template\whole_note.png", "text": "Whole Note"},
-
+{"file": "template\whole_note.png", "text": "Whole Note"}
 ]
 
 recognition_list = []
@@ -82,17 +81,24 @@ for normalized_image in normalized_images:
         template = fs.threshold(template)
         result = cv2.matchTemplate(normalized_image, template, cv2.TM_CCOEFF_NORMED)
 
-        max_value = np.max(result)
-        loc = np.where(result == max_value)
-
         threshold = 0.7
 
-        if max_value >= threshold:
-            loc = list(zip(*loc[::-1]))[0]
-            processed_locations.append([loc[0], loc[1], template_text, (loc[1] + loc[1] + template.shape[0]) / 2])
-            cv2.rectangle(result_subimg, loc, (loc[0] + template.shape[1], loc[1] + template.shape[0]), (0, 0, 255), 2)
-            # cv2.putText(result_img, f'{template_text} ({loc[0]}, {loc[1]})', (loc[0], loc[1] - 10),
-            #             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1)
+        locations = np.where(result >= threshold)
+        for loc in zip(*locations[::-1]):  # 하나라도 검출 되었을때 중복 검출 방지 검사 반복문
+            skip_location = False
+            for processed_loc in processed_locations:
+                distance = np.sqrt((loc[0] - processed_loc[0]) ** 2 + (loc[1] - processed_loc[1]) ** 2)
+                if distance < 5:
+                    skip_location = True
+                    break
+
+            if not skip_location:
+                processed_locations.append([loc[0], loc[1], template_text, (loc[1] + loc[1] + template.shape[0]) / 2])
+                cv2.rectangle(result_subimg, loc, (loc[0] + template.shape[1], loc[1] + template.shape[0]), (0, 0, 255),
+                              2)
+                # cv2.putText(result_img, f'{template_text} ({loc[0]}, {loc[1]})', (loc[0], loc[1] - 10),
+                #             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1)
+    print(stave_info)
 
     processed_locations.sort(key=lambda entry: entry[0]) # x좌표 기준으로 정렬
 
@@ -100,13 +106,6 @@ for normalized_image in normalized_images:
     # processed_locations = [[entry[2], entry[3]] for entry in processed_locations]
 
     recognition_list.append(processed_locations)
-
-    # 이미지 띄우기
-    cv2.imshow('result_subimage', result_subimg)
-    k = cv2.waitKey(0)
-    if k == 27:
-        cv2.destroyAllWindows()
-
 
     # 이미지 띄우기
     cv2.imshow('result_subimage', result_subimg)

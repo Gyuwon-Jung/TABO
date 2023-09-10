@@ -8,7 +8,7 @@ import modules
 
 # 이미지 불러오기
 resource_path = os.getcwd() + "/resources/"
-image_0 = cv2.imread(resource_path + "music1.jpg")
+image_0 = cv2.imread(resource_path + "music4.jpg")
 
 # 1. 보표 영역 추출 및 그 외 노이즈 제거
 image_1, subimage = modules.remove_noise(image_0)
@@ -49,20 +49,20 @@ for i, contour in enumerate(contours):
                 pixels += (object_roi[row][col] > 0)
             for pixel in range(pixels):
                 histogram[height - pixel - 1, col] = 255  # 히스토그램을 아래부터 채웁니다.
-        # if i==45:
-        #     # 이미지 띄우기
-        #     cv2.imshow('object', object_roi)
-        #     k = cv2.waitKey(0)
-        #     if k == 27:
-        #         cv2.destroyAllWindows()
-        #     # 히스토그램을 Matplotlib을 사용하여 시각화합니다.
-        #     plt.figure(figsize=(10, 5))
-        #     plt.imshow(histogram, cmap='gray', aspect='auto')
-        #     plt.title('Vertical Histogram')
-        #     plt.xlabel('Column')
-        #     plt.ylabel('Pixel Height')
-        #     plt.colorbar()
-        #     plt.show()
+        if i==45:
+            # 이미지 띄우기
+            cv2.imshow('object', object_roi)
+            k = cv2.waitKey(0)
+            if k == 27:
+                cv2.destroyAllWindows()
+            # 히스토그램을 Matplotlib을 사용하여 시각화합니다.
+            plt.figure(figsize=(10, 5))
+            plt.imshow(histogram, cmap='gray', aspect='auto')
+            plt.title('Vertical Histogram')
+            plt.xlabel('Column')
+            plt.ylabel('Pixel Height')
+            plt.colorbar()
+            plt.show()
 
         # 각 열의 픽셀 값을 출력합니다.
         for col in range(width):

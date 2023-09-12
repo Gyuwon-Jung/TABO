@@ -41,3 +41,10 @@
 <img src="https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white">
 <img src="https://img.shields.io/badge/discord-5865F2?style=for-the-badge&logo=discord&logoColor=white">
 </div>
+
+## TODO
+카메라로 들어온 이미지 보정
+객체 레이블링 중에 쉼표와 높은 음자리표, 박자표 제외 해야함.
+음은 템플릿 매칭 후 나온 결과를 CNN 모델의 예측값과 결합해야함.
+점 음표와 같은 경우 객체 검출 과정에서 점 하나만 따로 검출되는 경우도 처리해야함.
+== 할게 많네 ==

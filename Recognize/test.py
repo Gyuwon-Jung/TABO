@@ -1,14 +1,16 @@
 import cv2
 import os
 import numpy as np
-from matplotlib import pyplot as plt
-
 import functions as fs
 import modules
 
 # 이미지 불러오기
 resource_path = os.getcwd() + "/resources/"
 image_0 = cv2.imread(resource_path + "music1.jpg")
+
+# 결과를 저장할 디렉토리 생성 (이미 존재하는 경우 무시)
+result_dir = 'result'
+os.makedirs(result_dir, exist_ok=True)
 
 # 1. 보표 영역 추출 및 그 외 노이즈 제거
 image_1, subimage = modules.remove_noise(image_0)
@@ -23,10 +25,12 @@ image_3, staves = modules.normalization(image_2, staves, 10)
 closing_image = fs.closing(image_3)
 cnt, labels, stats, centroids = cv2.connectedComponentsWithStats(closing_image)  # 모든 객체 검출하기
 
+# stats 배열을 x 좌표를 기준으로 정렬
+sorted_stats = sorted(stats[1:], key=lambda x: x[0])
 
 # 모든 객체를 반복하며 (배경 제외)
 for i in range(1, cnt):
-    (x, y, w, h, area) = stats[i]
+    (x, y, w, h, area) = sorted_stats[i - 1]  # 인덱스에 주의하여 수정
 
     # 작은 객체는 무시합니다 (필요에 따라 최소 크기 임계값을 조정하세요)
     if w < fs.weighted(5) or h < fs.weighted(5):
@@ -46,28 +50,6 @@ for i in range(1, cnt):
         pixels = np.count_nonzero(object_roi[:, col])
         histogram[height - pixels:, col] = 255  # 히스토그램을 아래부터 채웁니다
 
-    # # 객체와 해당 수직 히스토그램을 표시합니다 (디버깅을 위해 이 조건을 조정할 수 있습니다)
-    # if i == 45:
-    #     # 객체를 표시합니다
-    #     cv2.imshow('object', object_roi)
-    #     k = cv2.waitKey(0)
-    #     if k == 27:
-    #         cv2.destroyAllWindows()
-    #
-    #     # Matplotlib을 사용하여 수직 히스토그램을 시각화합니다
-    #     plt.figure(figsize=(10, 5))
-    #     plt.imshow(histogram, cmap='gray', aspect='auto')
-    #     plt.title('수직 히스토그램')
-    #     plt.xlabel('열')
-    #     plt.ylabel('픽셀 높이')
-    #     plt.colorbar()
-    #     plt.show()
-
-    # 각 열의 픽셀 값을 출력합니다
-    for col in range(width):
-        column_pixels = np.where(object_roi[:, col] > 0)[0]
-        print(f"열 {col}: {column_pixels}")
-
     # 수직 히스토그램을 기반으로 객체 내의 음표 기둥 개수를 계산합니다
     note_pillar_count = 0
     threshold = 30  # 열을 음표 기둥으로 간주할 임계값 (필요에 따라 조정하세요)
@@ -85,8 +67,13 @@ for i in range(1, cnt):
     # 현재 객체의 결과를 출력합니다
     print(f"객체 {i + 1} - 음표 기둥 개수: {note_pillar_count}")
 
-    # 이미지에 음표 기둥 개수를 표시합니다
-    cv2.putText(image_3, f"{i+1}: {note_pillar_count} ", (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
+    # 객체를 개별 파일로 저장합니다 (기둥 개수에 따라 분리)
+    for j in range(note_pillar_count):
+        x1 = x + j * (w // note_pillar_count)  # 분리된 객체의 왼쪽 x 좌표
+        x2 = x1 + (w // note_pillar_count)  # 분리된 객체의 오른쪽 x 좌표
+        object_pillar = object_roi[:, x1 - (x - 2): x2 - (x - 2)]  # 기둥에 해당하는 부분 추출
+        filename = f"{result_dir}/object_{i + 1}_pillar_{j + 1}.png"  # 결과 디렉토리와 파일 이름 설정
+        cv2.imwrite(filename, object_pillar)
 
 # 음표 기둥 개수가 표시된 최종 결과 이미지를 표시합니다
 cv2.imshow('result_image', image_3)

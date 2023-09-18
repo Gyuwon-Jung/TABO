@@ -72,4 +72,44 @@ def midi_note_to_name(midi_note):
 # clean_midi의 음표들을 음표 이름으로 변환하여 출력
 for event in clean_midi:
     event[1] = midi_note_to_name(event[1])
+ 
+note_on_events = []
+note_off_events = []
+
+for event in clean_midi:
+    event_type, note, time, channel = event
+    
+    if event_type == 'note_on':
+        note_on_events.append((note, time))
+    elif event_type == 'note_off':
+        note_off_events.append((note, time))
+
+def time_to_note(note_on_events, note_off_events):
+    final_events = []
+
+    for i in range(len(note_on_events)):
+        note_pointer = note_on_events[i][0]
+        time_pointer = note_on_events[i][1]
+        for j in range(len(note_off_events)):
+            if time_pointer >= note_off_events[j][1]:
+                continue
+            elif note_pointer == note_off_events[j][0]:
+                beat = note_list(time_pointer, note_off_events[j][1])
+                final_events.append({'note': note_pointer, 'beat': beat, 'start_time': time_pointer})
+                break
+    
+    return final_events
+                
+def note_list(on_time, off_time):
+    time = off_time - on_time
+     
+    if time == 0.25:
+        beat = 'q'  #임시
+    elif time == 0.5:
+        beat = 'h'  #임시
+
+    return beat
+
+final_events = time_to_note(note_on_events, note_off_events)
+for event in final_events:
     print(event)

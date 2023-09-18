@@ -1,0 +1,21 @@
+{
+  "name": "nodebird",
+  "version": "0.0.1",
+  "description": "TABO 서버",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app"
+  },
+  "author": "TABO",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "morgan": "^1.10.0",
+    "passport": "^0.6.0",
+    "passport-kakao": "^1.0.1",
+    "passport-local": "^1.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

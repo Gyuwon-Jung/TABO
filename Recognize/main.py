@@ -204,23 +204,50 @@ for result in mapped_result_list:
             result[i][1]+='#'
 
 # 결과 확인
-
+memorize_index=[]
 for result in mapped_result_list:
     k = 0  # 각 result 리스트마다 k 값을 초기화
     for i in range(len(result)):
         if k == 1:
-            result.insert(i, ['line'])
+            memorize_index.append([i])
             k = 0
             print('li')
 
+            if result[i][0] == 'Treble':
+                print('treble')
+                k = 0
+
+            elif result[i][0] == 'Quarter Note':
+                k += 0.25
+                print('q')
+
+            elif result[i][0] == 'Half Note':
+                k += 0.5
+                print('h')
+
+            elif result[i][0] == 'Dotted Quarter Note':
+                k += 0.375
+                print('dq')
+
+            elif result[i][0] == 'Eight Note':
+                k += 0.125
+                print('e')
+
+            elif result[i][0] == 'Whole Note':
+                k += 1
+                print('w')
+
+            elif result[i][0] == 'Quarter Rest':
+                k += 0.25
+                print('qr')
+
         elif result[i][0] == 'Treble':
             print('treble')
-            continue
+            k=0
 
         elif result[i][0] == 'Quarter Note':
             k += 0.25
             print('q')
-
 
         elif result[i][0] == 'Half Note':
             k += 0.5
@@ -241,7 +268,6 @@ for result in mapped_result_list:
         elif result[i][0] == 'Quarter Rest':
             k += 0.25
             print('qr')
-        print(k)
     print('\n')
 
 for result in mapped_result_list:

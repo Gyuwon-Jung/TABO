@@ -10,7 +10,7 @@ subimages_array = []  # 서브 이미지 배열들을 저장할 리스트
 stave_list=[] # 해당 악보의 모든 오선 정보를 담고 있는 리스트
 # 이미지 불러오기
 resource_path = os.getcwd() + "/resources/"
-image_0 = cv2.imread(resource_path + "music1.jpg")
+image_0 = cv2.imread(resource_path + "music.jpg")
 
 # 1. 보표 영역 추출 및 그 외 노이즈 제거
 image_1,subimages_array = modules.remove_noise(image_0)
@@ -191,6 +191,17 @@ for mapping, recognition in zip(mapping_list, recognition_list):
             mapped_results.append([rec_text, closest_mapping])
     mapped_result_list.append(mapped_results)
 
+variation=None
+# 음표 리스트를 순회하면서 "Sharp"를 처리
+for result in mapped_result_list:
+    for i in range(len(result) - 1):
+        if result[i][0] == 'Sharp':
+            # #을 발견하면 variation에 그 Sharp에 해당하는 값을 저장
+            variation = result[i][1]
+            # "Sharp" 표시를 제거
+            result.pop(i)
+        elif variation == result[i][1]:
+            result[i][1]+='#'
 # 결과 확인
 for result in mapped_result_list:
     print(result)

@@ -8,7 +8,7 @@ import modules
 
 # 이미지 불러오기
 resource_path = os.getcwd() + "/resources/"
-image_0 = cv2.imread(resource_path + "music1.jpg")
+image_0 = cv2.imread(resource_path + "music.jpg")
 
 # 1. 보표 영역 추출 및 그 외 노이즈 제거
 image_1, subimage = modules.remove_noise(image_0)

@@ -275,7 +275,7 @@ for result in mapped_result_list:
 
     j=0 # 인덱스 초기화
     for index in memorize_index:
-        result.insert(index+j, ['line'])
+        result.insert(index+j, ['line', 0])
         j+=1
     memorize_index = []
 
@@ -283,15 +283,15 @@ for result in mapped_result_list:
 for result in mapped_result_list:
     print(result)
 
-# # 결과를 텍스트 파일로 저장 (각 음표별로 분할되어있는)
-# output_file_path = "result.txt"
-# with open(output_file_path, "w") as output_file:
-#     for result in mapped_result_list:
-#         for entry in result:
-#             output_file.write(f"{entry[0]}, {entry[1]}\n")
-#         output_file.write("\n")  # 공백 추가
-#
-# print(f"Result saved to {output_file_path}")
+# 결과를 텍스트 파일로 저장 (각 음표별로 분할되어있는)
+output_file_path = "result.txt"
+with open(output_file_path, "w") as output_file:
+    for result in mapped_result_list:
+        for entry in result:
+            output_file.write(f"{entry[0]}, {entry[1]}\n")
+        output_file.write("\n")  # 공백 추가
+
+print(f"Result saved to {output_file_path}")
 
 
 # # 템플릿 생성용 이미지 저장 경로

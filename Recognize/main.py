@@ -191,6 +191,7 @@ for mapping, recognition in zip(mapping_list, recognition_list):
             mapped_results.append([rec_text, closest_mapping])
     mapped_result_list.append(mapped_results)
 
+# sharp 처리하는 문법
 variation=None
 # 음표 리스트를 순회하면서 "Sharp"를 처리
 for result in mapped_result_list:
@@ -209,66 +210,75 @@ for result in mapped_result_list:
     k = 0  # 각 result 리스트마다 k 값을 초기화
     for i in range(len(result)):
         if k == 1:
-            memorize_index.append([i])
+            memorize_index.append(i)
             k = 0
-            print('li')
+            # print('li')
 
             if result[i][0] == 'Treble':
-                print('treble')
+                # print('treble')
                 k = 0
 
             elif result[i][0] == 'Quarter Note':
                 k += 0.25
-                print('q')
+                # print('q')
 
             elif result[i][0] == 'Half Note':
                 k += 0.5
-                print('h')
+                # print('h')
 
             elif result[i][0] == 'Dotted Quarter Note':
                 k += 0.375
-                print('dq')
+                # print('dq')
 
             elif result[i][0] == 'Eight Note':
                 k += 0.125
-                print('e')
+                # print('e')
 
             elif result[i][0] == 'Whole Note':
                 k += 1
-                print('w')
+                # print('w')
 
             elif result[i][0] == 'Quarter Rest':
                 k += 0.25
-                print('qr')
+                # print('qr')
 
         elif result[i][0] == 'Treble':
-            print('treble')
+            # print('treble')
             k=0
 
         elif result[i][0] == 'Quarter Note':
             k += 0.25
-            print('q')
+            # print('q')
 
         elif result[i][0] == 'Half Note':
             k += 0.5
-            print('h')
+            # print('h')
 
         elif result[i][0] == 'Dotted Quarter Note':
             k += 0.375
-            print('dq')
+            # print('dq')
 
         elif result[i][0] == 'Eight Note':
             k += 0.125
-            print('e')
+            # print('e')
 
         elif result[i][0] == 'Whole Note':
             k += 1
-            print('w')
+            # print('w')
 
         elif result[i][0] == 'Quarter Rest':
             k += 0.25
-            print('qr')
-    print('\n')
+    #         print('qr')
+    # print('\n')
+
+    # print(memorize_index)
+
+    j=0 # 인덱스 초기화
+    for index in memorize_index:
+        result.insert(index+j, ['line'])
+        j+=1
+    memorize_index = []
+
 
 for result in mapped_result_list:
     print(result)

@@ -59,7 +59,7 @@ template_data = [
 {"file": "template\quarter_left_2.png", "text": "Quarter Note"},
 {"file": "template\quarter_right_2.png", "text": "Quarter Note"},
 {"file": "template\dot.png", "text": "Dot"},
-{"file": "template\quarter_rest.png", "text": "Quater Rest"},
+{"file": "template\quarter_rest.png", "text": "Quarter Rest"},
 {"file": "template\whole_note.png", "text": "Whole Note"}
 ]
 
@@ -202,7 +202,74 @@ for result in mapped_result_list:
             result.pop(i)
         elif variation == result[i][1]:
             result[i][1]+='#'
+
 # 결과 확인
+memorize_index=[]
+for result in mapped_result_list:
+    k = 0  # 각 result 리스트마다 k 값을 초기화
+    for i in range(len(result)):
+        if k == 1:
+            memorize_index.append([i])
+            k = 0
+            print('li')
+
+            if result[i][0] == 'Treble':
+                print('treble')
+                k = 0
+
+            elif result[i][0] == 'Quarter Note':
+                k += 0.25
+                print('q')
+
+            elif result[i][0] == 'Half Note':
+                k += 0.5
+                print('h')
+
+            elif result[i][0] == 'Dotted Quarter Note':
+                k += 0.375
+                print('dq')
+
+            elif result[i][0] == 'Eight Note':
+                k += 0.125
+                print('e')
+
+            elif result[i][0] == 'Whole Note':
+                k += 1
+                print('w')
+
+            elif result[i][0] == 'Quarter Rest':
+                k += 0.25
+                print('qr')
+
+        elif result[i][0] == 'Treble':
+            print('treble')
+            k=0
+
+        elif result[i][0] == 'Quarter Note':
+            k += 0.25
+            print('q')
+
+        elif result[i][0] == 'Half Note':
+            k += 0.5
+            print('h')
+
+        elif result[i][0] == 'Dotted Quarter Note':
+            k += 0.375
+            print('dq')
+
+        elif result[i][0] == 'Eight Note':
+            k += 0.125
+            print('e')
+
+        elif result[i][0] == 'Whole Note':
+            k += 1
+            print('w')
+
+        elif result[i][0] == 'Quarter Rest':
+            k += 0.25
+            print('qr')
+    print('\n')
+
 for result in mapped_result_list:
     print(result)
 

@@ -278,8 +278,20 @@ for result in mapped_result_list:
 
         elif result[i][0] == 'Quarter Rest':
             k += 0.25
+            sen += " :4 ##"
 
 sen += " =|="
+
+# j = 0
+# for result in mapped_result_list:
+#     j=0
+#     for index in memorize_index:
+#         result.insert(index + j, ['line'])
+#         j += 1
+#     memorize_index = []
+
+
+
 
 # for result in mapped_result_list:
 #    print(result)

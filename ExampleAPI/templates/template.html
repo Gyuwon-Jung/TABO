@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vextab Example</title>
+    <!-- Include the div.prod.js script -->
+    <script src="{{ url_for('static', filename='div.prod.js') }}"></script>
+</head>
+<body>
+    <!-- Vextab content inside a div with class vextab-auto -->
+    <div class="vextab-auto"
+        width=680 scale=1.0 editor="false"
+        editor-width=680 editor-height=330>
+		{{string}}
+    </div>
+</body>
+</html>

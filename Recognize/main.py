@@ -203,84 +203,88 @@ for result in mapped_result_list:
         elif variation == result[i][1]:
             result[i][1]+='#'
 
-# 결과 확인
-memorize_index=[]
-sen =""
 
-for result in mapped_result_list:
-    k = 0  # 각 result 리스트마다 k 값을 초기화
-    for i in range(len(result)):
-        if k == 1:
-            memorize_index.append([i])
-            sen += " |"
-            k = 0
+sen = fs.convert_to_sentence(mapped_result_list)
+print(sen)
 
-            if result[i][0] == 'Treble':
-                sen += "tabstave notation=true clef=treble\n notes"
-                k = 0
-
-            elif result[i][0] == 'Quarter Note':
-                sen += " :q "
-                sen += fs.get_number(result[i][1])
-                k += 0.25
-
-            elif result[i][0] == 'Half Note':
-                sen += " :h "
-                sen += fs.get_number(result[i][1])
-                k += 0.5
-
-            elif result[i][0] == 'Dotted Quarter Note':
-                sen += " :qd "
-                sen += fs.get_number(result[i][1])
-                k += 0.375
-
-            elif result[i][0] == 'Eight Note':
-                sen += " :8 "
-                sen += fs.get_number(result[i][1])
-                k += 0.125
-
-            elif result[i][0] == 'Whole Note':
-                sen += " :w "
-                sen += fs.get_number(result[i][1])
-                k += 1
-
-            elif result[i][0] == 'Quarter Rest':
-                k += 0.25
-
-        elif result[i][0] == 'Treble':
-            sen += "\ntabstave notation=true clef=treble\nnotes"
-            k=0
-
-        elif result[i][0] == 'Quarter Note':
-            sen += " :q "
-            sen += fs.get_number(result[i][1])
-            k += 0.25
-
-        elif result[i][0] == 'Half Note':
-            sen += " :h "
-            sen += fs.get_number(result[i][1])
-            k += 0.5
-
-        elif result[i][0] == 'Dotted Quarter Note':
-            sen += " :qd "
-            sen += fs.get_number(result[i][1])
-            k += 0.375
-
-        elif result[i][0] == 'Eight Note':
-            sen += " :8 "
-            sen += fs.get_number(result[i][1])
-            k += 0.125
-
-        elif result[i][0] == 'Whole Note':
-            sen += " :w "
-            sen += fs.get_number(result[i][1])
-            k += 1
-
-        elif result[i][0] == 'Quarter Rest':
-            k += 0.25
-            sen += " :4 ##"
-
-sen += " =|="
+# # 결과 확인
+# memorize_index=[]
+# sen =""
+#
+# for result in mapped_result_list:
+#     k = 0  # 각 result 리스트마다 k 값을 초기화
+#     for i in range(len(result)):
+#         if k == 1:
+#             memorize_index.append([i])
+#             sen += " |"
+#             k = 0
+#
+#             if result[i][0] == 'Treble':
+#                 sen += "tabstave notation=true clef=treble\n notes"
+#                 k = 0
+#
+#             elif result[i][0] == 'Quarter Note':
+#                 sen += " :q "
+#                 sen += fs.get_number(result[i][1])
+#                 k += 0.25
+#
+#             elif result[i][0] == 'Half Note':
+#                 sen += " :h "
+#                 sen += fs.get_number(result[i][1])
+#                 k += 0.5
+#
+#             elif result[i][0] == 'Dotted Quarter Note':
+#                 sen += " :qd "
+#                 sen += fs.get_number(result[i][1])
+#                 k += 0.375
+#
+#             elif result[i][0] == 'Eight Note':
+#                 sen += " :8 "
+#                 sen += fs.get_number(result[i][1])
+#                 k += 0.125
+#
+#             elif result[i][0] == 'Whole Note':
+#                 sen += " :w "
+#                 sen += fs.get_number(result[i][1])
+#                 k += 1
+#
+#             elif result[i][0] == 'Quarter Rest':
+#                 k += 0.25
+#
+#         elif result[i][0] == 'Treble':
+#             sen += "\ntabstave notation=true clef=treble\nnotes"
+#             k=0
+#
+#         elif result[i][0] == 'Quarter Note':
+#             sen += " :q "
+#             sen += fs.get_number(result[i][1])
+#             k += 0.25
+#
+#         elif result[i][0] == 'Half Note':
+#             sen += " :h "
+#             sen += fs.get_number(result[i][1])
+#             k += 0.5
+#
+#         elif result[i][0] == 'Dotted Quarter Note':
+#             sen += " :qd "
+#             sen += fs.get_number(result[i][1])
+#             k += 0.375
+#
+#         elif result[i][0] == 'Eight Note':
+#             sen += " :8 "
+#             sen += fs.get_number(result[i][1])
+#             k += 0.125
+#
+#         elif result[i][0] == 'Whole Note':
+#             sen += " :w "
+#             sen += fs.get_number(result[i][1])
+#             k += 1
+#
+#         elif result[i][0] == 'Quarter Rest':
+#             k += 0.25
+#             sen += " :4 ##"
+#
+# sen += " =|="
 
 # j = 0
 # for result in mapped_result_list:
@@ -293,9 +297,9 @@ sen += " =|="
 
 
 
-# for result in mapped_result_list:
-#    print(result)
-print(sen)
+# # for result in mapped_result_list:
+# #    print(result)
+# print(sen)
 
 # # 결과를 텍스트 파일로 저장 (각 음표별로 분할되어있는)
 # output_file_path = "result.txt"

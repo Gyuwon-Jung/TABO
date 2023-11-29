@@ -1,6 +1,7 @@
 const express = require("express");
 const morgan = require("morgan");
 const path = require("path");
+const dotenv = require("dotenv");
 const passport = require("passport");
 
 const pageRouter = require("./routes/page.js");

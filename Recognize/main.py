@@ -318,3 +318,7 @@ print(sen)
 # # 이미지 저장
 # cv2.imwrite(output_path, result_img)
 # print(f"Result image saved at: {output_path}")
+
+[['Treble', 'B4'], ['Quarter Note', 'B4'], ['Quarter Note', 'A4'], ['Quarter Note', 'G4'], ['Quarter Note', 'A4'], ['Quarter Note', 'B4'], ['Quarter Note', 'B4'], ['Half Note', 'B4'], ['Quarter Note', 'A4'], ['Quarter Note', 'A4'], ['Half Note', 'A4'], ['Quarter Note', 'B4'], ['Quarter Note', 'D5'], ['Half Note', 'D5'], ['Quarter Note', 'B4'], ['Quarter Note', 'A4'], ['Quarter Note', 'G4'], ['Quarter Note', 'A4']]
+[['Treble', 'B4'], ['Quarter Note', 'B4'], ['Quarter Note', 'B4'], ['Quarter Note', 'B4'], ['Quarter Note', 'B4'], ['Quarter Note', 'A4'], ['Quarter Note', 'A4'], ['Quarter Note', 'B4'], ['Quarter Note', 'A4'], ['Half Note', 'G4'], ['Quarter Rest', 'B4'], ['Quarter Note', 'A4'], ['Dotted Quarter Note', 'B4'], ['Eight Note', 'A4'], ['Quarter Note', 'G4'], ['Quarter Note', 'A4'], ['Quarter Note', 'B4'], ['Quarter Note', 'B4'], ['Half Note', 'B4']]
+[['Treble', 'B4'], ['Quarter Note', 'A4'], ['Quarter Note', 'A4'], ['Half Note', 'A4'], ['Quarter Note', 'B4'], ['Quarter Note', 'D5'], ['Half Note', 'D5'], ['Dotted Quarter Note', 'B4'], ['Eight Note', 'A4'], ['Quarter Note', 'G4'], ['Quarter Note', 'A4'], ['Quarter Note', 'B4'], ['Quarter Note', 'B4'], ['Quarter Note', 'B4'], ['Quarter Note', 'B4'], ['Quarter Note', 'A4'], ['Quarter Note', 'A4'], ['Quarter Note', 'B4'], ['Quarter Note', 'A4'], ['Whole Note', 'G4']]

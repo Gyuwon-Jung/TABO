@@ -21,6 +21,23 @@ def remove_noise(image):
 
     return masked_image, subimages
 
+def camera_remove_noise(image):
+    mask = np.zeros(image.shape, np.uint8)  # 보표 영역만 추출하기 위해 마스크 생성
+    subimages = []  # subimage들을 저장할 리스트
+    cnt, labels, stats, centroids = cv2.connectedComponentsWithStats(image)  # 레이블링
+    for i in range(1, cnt):
+        x, y, w, h, area = stats[i]
+        if w > image.shape[1] * 0.7:  # 보표 영역에만
+            cv2.rectangle(mask, (x, y, w, h), (255, 0, 0), -1)  # 사각형 그리기
+
+            # 원본 이미지에서 사각형 영역 추출하여 subimages 리스트에 추가
+            subimage =[x, y, w, h]
+            subimages.append(subimage)
+
+    masked_image = cv2.bitwise_and(image, mask)  # 보표 영역 추출
+
+    return masked_image, subimages
+
 def remove_staves(image):
     height, width = image.shape
     staves = []  # 오선의 좌표들이 저장될 리스트

@@ -1,10 +1,7 @@
 import cv2
 import os
-import numpy as np
-from matplotlib import pyplot as plt
-
 import functions as fs
-import modules
+from Recognize import modules
 
 # 이미지 불러오기
 resource_path = os.getcwd() + "/resources/"
@@ -19,25 +16,14 @@ image_2, staves = modules.remove_staves(image_1)
 # 3. 악보 이미지 정규화
 image_3, staves = modules.normalization(image_2, staves, 10)
 
-parent =image_3
-src = parent.copy()
-tmp = parent.copy()
+image_3 = cv2.bitwise_not(image_3)
 
-roi = cv2.selectROI("Select ROI drag area!!!!!", src)
-tar = tmp[roi[1] : roi[1] + roi[3], roi[0] : roi[0] + roi[2]]
-h, w = tar.shape[:2]
 
-while True:
-    res = cv2.matchTemplate(src, tar, cv2.TM_CCOEFF_NORMED)
-    _, maxv, _, maxloc = cv2.minMaxLoc(res)
-    if maxv < 0.8:
-        break
-    print('maxv : ', maxv)
-    print('maxloc : ', maxloc)
-    x, y = maxloc
-    cv2.rectangle(parent, (x, y), (x + w, y + h), (255, 0, 0), 2)
-    cv2.rectangle(src, (x, y), (x + w, y + h), (0, 0, 0), -1)
+cv2.imwrite(os.getcwd() + '/image.jpg', image_3)  # 현재 디렉토리에 'image.jpg'로 저장
 
-cv2.imshow('p', parent)
-cv2.waitKey()
-cv2.destroyAllWindows()
+# 이미지 띄우기
+cv2.imshow('image', image_3)
+k = cv2.waitKey(0)
+if k == 27:
+    cv2.destroyAllWindows()
+

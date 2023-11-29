@@ -6,7 +6,7 @@ import modules
 
 # 이미지 불러오기
 resource_path = os.getcwd() + "/resources/"
-image_0 = cv2.imread(resource_path + "music1.jpg")
+image_0 = cv2.imread(resource_path + "music.jpg")
 
 # 결과를 저장할 디렉토리 생성 (이미 존재하는 경우 무시)
 result_dir = 'result'
@@ -76,7 +76,7 @@ for i in range(1, cnt):
         cv2.imwrite(filename, object_pillar)
 
 # 음표 기둥 개수가 표시된 최종 결과 이미지를 표시합니다
-cv2.imshow('result_image', image_3)
+cv2.imshow('result_image', image_1)
 k = cv2.waitKey(0)
 if k == 27:
     cv2.destroyAllWindows()

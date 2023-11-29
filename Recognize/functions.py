@@ -29,3 +29,4 @@ def get_number(note):
     }
 
     return mapping.get(note, "해당 문자열에 대한 숫자가 없습니다.")
+

@@ -35,7 +35,7 @@ image = fs.camera_threshold(rotated)
 cnt, labels, stats, centroids = cv2.connectedComponentsWithStats(image)  # 레이블링
 for i in range(1, cnt):
     x, y, w, h, area = stats[i]
-    if w > image.shape[1] * 0.75:  # 보표 영역에만
+    if w > image.shape[1] * 0.75:  # 보표 영역에만 shape[0]은 높이값
         cv2.rectangle(image, (x, y, w, h), (255, 0, 0), 1)  # 사각형 그리기
 
 # 결과를 출력합니다.

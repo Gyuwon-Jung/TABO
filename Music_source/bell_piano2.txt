@@ -1,67 +1,67 @@
-Quarter Note, D4
-Sixteen Note, D5
-Eight Note, B4
-Dotted Eight Note, A4
-Eight Note, D4
-Quarter Note, G4
-Half Note, D4
-Sixteen Note, A4
-Dotted Quarter rest, B4
-Half Note, D4
-Sixteen Note, D5
-Dotted Eight Note, B4
-Dotted Eight Note, A4
-Quarter Note, G4
-Dotted Quarter Note, E4
-Eight Note, B4
-Quarter Note, A4
-Half Note, F#4
-Dotted Eight Note, D5
-Quarter Note, C5
-Dotted Quarter Note, A4
-Quarter Note, B4
-Dotted Quarter Note, G4
-Quarter Note, D4
-Dotted Eight Note, B4
-Eight Note, D4
-Half Note, G4
-Sixteen Note, D4
-Half Note, D4
-Sixteen Note, D5
-Quarter rest, B4
-Quarter Note, D4
-Eight Note, B4
-Dotted Eight Note, A4
-Eight Note, D4
-Dotted Eight Note, G4
-Dotted Quarter Note, E4
-Eight Note, B4
-Quarter Note, A4
-Quarter Note, D5
-Eight Note, E5
-Dotted Eight Note, D5
-Quarter Note, C5
-Dotted Eight Note, A4
-Half Note, G4
-Quarter Note, B4
-Dotted Quarter Note, D5
-Dotted Eight Note, G4
-Quarter Note, A4
-Dotted Eight Note, B4
-Sixteen Note, D5
-Sixteenth rest, B4
-Eight Note, B4
-Quarter Note, A4
-Eight Note, B4
-Dotted Quarter Note, A4
-Dotted Quarter Note, D5
-Dotted Eight Note, B4
-Dotted Quarter Note, D5
-Dotted Eight Note, G4
-Dotted Eight Note, A4
-Dotted Eight Note, B4
-Dotted Quarter Note, D5
-Dotted Eight Note, C5
-Quarter Note, A4
-Quarter Note, G4
-Dotted Quarter rest, B4
+quarter_note, D4
+sixteen_note, D5
+eight_note, B4
+eight_note_dot, A4
+eight_note, D4
+quarter_note, G4
+half_note, D4
+sixteen_note, A4
+quarter_rest_dot, B4
+half_note, D4
+sixteen_note, D5
+eight_note_dot, B4
+eight_note_dot, A4
+quarter_note, G4
+quarter_note_dot, E4
+eight_note, B4
+quarter_note, A4
+half_note, F#4
+eight_note_dot, D5
+quarter_note, C5
+quarter_note_dot, A4
+quarter_note, B4
+quarter_note_dot, G4
+quarter_note, D4
+eight_note_dot, B4
+eight_note, D4
+half_note, G4
+sixteen_note, D4
+half_note, D4
+sixteen_note, D5
+quarter_rest, B4
+quarter_note, D4
+eight_note, B4
+eight_note_dot, A4
+eight_note, D4
+eight_note_dot, G4
+quarter_note_dot, E4
+eight_note, B4
+quarter_note, A4
+quarter_note, D5
+eight_note, E5
+eight_note_dot, D5
+quarter_note, C5
+eight_note_dot, A4
+half_note, G4
+quarter_note, B4
+quarter_note_dot, D5
+eight_note_dot, G4
+quarter_note, A4
+eight_note_dot, B4
+sixteen_note, D5
+sixteen_rest, B4
+eight_note, B4
+quarter_note, A4
+eight_note, B4
+quarter_note_dot, A4
+quarter_note_dot, D5
+eight_note_dot, B4
+quarter_note_dot, D5
+eight_note_dot, G4
+eight_note_dot, A4
+eight_note_dot, B4
+quarter_note_dot, D5
+eight_note_dot, C5
+quarter_note, A4
+quarter_note, G4
+quarter_rest_dot, B4

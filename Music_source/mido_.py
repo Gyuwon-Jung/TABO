@@ -3,7 +3,7 @@ import sys
 import numpy as np
 np.set_printoptions(threshold=np.inf)
 
-mid = MidiFile('sources/bell.mid')
+mid = MidiFile('Piano_basic_pitch.mid')
 mididict = []
 output = []
 
@@ -79,14 +79,14 @@ def midi_note_to_name(midi_note):
 
 def duration_to_rhythmic_name(duration):
     rhythmic_names = {
-        0.125: 'Sixteen Note',
-        0.25: 'Eight Note',
-        0.375: 'Dotted Eight Note',
-        0.5: 'Quarter Note',
-        0.75: 'Dotted Quarter Note',
-        1: 'Half Note',
-        1.5: 'Dotted Half Note',
-        2: 'Whole Note'
+        0.125: 'sixteen_note',
+        0.25: 'eight_note',
+        0.375: 'eight_note_dot',
+        0.5: 'quarter_note',
+        0.75: 'quarter_note_dot',
+        1: 'half_note',
+        1.5: 'half_note_dot',
+        2: 'whole_note'
     }
 
     closest_duration = min(rhythmic_names.keys(), key=lambda x: abs(x - duration))
@@ -100,14 +100,14 @@ def rest_duration_to_rhythmic_name(rest_duration):
 
     if rest_duration is not None:
         rhythmic_names = {
-            0.125: 'Sixteenth rest',
-            0.25: 'Eight rest',
-            0.375: 'Dotted Eighth rest',
-            0.5: 'Quarter rest',
-            0.75: 'Dotted Quarter rest',
-            1: 'Half rest',
-            1.5: 'Dotted Half rest',
-            2: 'Whole rest'
+            0.125: 'sixteen_rest',
+            0.25: 'eight_rest',
+            0.375: 'eight_rest_dot',
+            0.5: 'quarter_rest',
+            0.75: 'quarter_rest_dot',
+            1: 'half_rest',
+            1.5: 'half_rest_dot',
+            2: 'whole_rest'
         }
 
         closest_duration = min(rhythmic_names.keys(), key=lambda x: abs(x - rest_duration))
@@ -212,7 +212,7 @@ if last_rest_duration is not None and last_rest_duration != 0.0:
         
 
 # 결과 저장
-with open('bell_piano1.txt', 'w') as file:
+with open('bell_piano2.txt', 'w') as file:
     for note_info in output_notes:
         # 파일에 output_notes의 정보를 기록
         file.write(f"{note_info[1]}, {note_info[0]}\n")
